@@ -1,5 +1,6 @@
 import java.util.Scanner;
 import java.util.Random;
+import java.io.*;
 
 class Book{
     private int isbn;
@@ -7,7 +8,7 @@ class Book{
     private String publication;
     private int no_of_pages;
     public String bookName;
-    public static int popularity;
+    
     Book(){
         isbn = 0;
         author = "";
@@ -52,15 +53,14 @@ class Book{
 
 class Library{
     private int n; 
-    private Book[] books;
+    public Book[] books;
 
     Library(int size){
         n = size;
         books = new Book[n];
     }
-    void disps(){
-        System.out.println(n);
-    }
+    void NoOfBooks(){ System.out.println(n); }
+
     void library_input(){
         //Collections of Books
         for(int i=0; i<n; i++){ books[i] = new Book(); }
@@ -81,39 +81,110 @@ class Library{
     }
 
     Book[] DeleteByBookName(String findBook){
-        Book newbook[] = new Book[n];
-        for(int i=0,k=0; i<n; i++){
+        for(int i=0; i<n; i++){
             if(findBook.equals(books[i].bookName)){
-                System.out.println("Deleted!");
-                continue;
-            } else {
-                newbook[k++] = books[i];
+                for(int j=i; j<n-1; j++){
+                    books[j] = books[j+1];
+                }
+                break;
             }
         }
-        
-        books = newbook.clone();
         return books;
     }
 
     void library_display(){
         System.out.println(books.length);
-        for(int i=0; i<books.length; i++){
-            books[i].display();
+        try{
+            for(int i=0; i<books.length; i++){
+                books[i].display();
+            }
         }
+        catch(Exception e){
+            System.out.println("There is extra space");
+        }
+        
     }
 }
 
-// class Member{
 
-// }
+class Member extends Library{
+
+    private String member_name;
+    private int member_phone;
+    private String date_of_borrow;
+    private String date_of_return;
+    public String membership;
+    public String borrow_book;
+
+    Member(int n){
+        super(n);
+        member_name = "";
+        member_phone = 0;
+        membership = "None";
+        date_of_borrow = "0-0-0";
+        date_of_return = "0-0-0";
+    }
+
+    public void member_creation(){
+        Scanner mb = new Scanner(System.in);
+        
+        System.out.printf("Enter your name: ");
+        member_name = mb.next();
+
+        System.out.printf("Enter your phone number: ");
+        member_phone = mb.nextInt();
+        
+        System.out.println("Choose your membership: ");
+        System.out.println("1. VIP Members ");
+        System.out.println("2. Regular Members");
+        System.out.println("3. Student Members");
+        System.out.println("4. None");
+        
+        int quality;
+        quality = mb.nextInt();
+        switch(quality){
+            case 1: membership = "VIP"; break;
+            case 2: membership = "Regular"; break;
+            case 3: membership = "Student"; break;
+            case 4: membership = "None"; break;
+        }
+
+        String test_book;
+        while(true){
+            System.out.println("Enter the book to borrow: ");
+            test_book = mb.nextLine();
+            if(book_search(test_book) == true){
+                borrow_book = test_book;
+                break;
+            } 
+            else { System.out.println("The book is not available"); }
+        }
+
+        System.out.printf("Enter the Date of borrow");
+        date_of_borrow = mb.nextLine();
+
+        // private String returndate(String dateborrow){
+
+        // }
+    }
+
+    public void display(){
+        System.out.println("Name of the member: " + member_name);
+        System.out.println("Phone number of the member: " + Integer.toString(member_phone));
+        System.out.println("Membership Quality: " + membership);
+        System.out.println("Book Borrowed: " + borrow_book);
+        System.out.println("Date of Borrow: " + date_of_borrow);
+        
+    }
+}
+
 public class project{
     public static void main(String[] args) {
-        Library library1 = new Library(10);
-        library1.disps();
-        library1.library_input();   
-        library1.library_display();
-        library1.DeleteByBookName("Sherlock Holmes");
-        library1.library_display();
-        System.out.println(library1.book_search("Great Expectations"));
+        Member member1 = new Member(1);
+        member1.NoOfBooks();
+        member1.library_input();   
+        member1.library_display();
+        member1.member_creation();
+        member1.display();
     }
 }
