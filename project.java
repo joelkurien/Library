@@ -2,7 +2,6 @@
 import java.util.Scanner;
 import java.util.Random;
 import java.io.*;
-import java.sql.Date;
 
 //Class to create a book
 class Book{
@@ -22,7 +21,7 @@ class Book{
     }
 
     //Function to create a random isbn
-    private int isbn_creator(){
+    private int id_creator(){
         Random rand = new Random();
         int x = 1000000000;
         int isbn = rand.nextInt(x);
@@ -33,7 +32,7 @@ class Book{
     public void book_input(){
         Scanner sc = new Scanner(System.in);
         
-        isbn = isbn_creator();
+        isbn = id_creator();
         System.out.printf("Enter the name of the book: ");
         bookName = sc.nextLine();
         
@@ -69,7 +68,9 @@ class Library{
     }
 
     //Count number of books
-    void NoOfBooks(){ System.out.println(n); }
+    void NoOfBooks(){ 
+        System.out.println("The number of books in the library: ");
+        System.out.println(n); }
 
     //Input the books into an array of books
     void library_input(){
@@ -125,6 +126,7 @@ class Member extends Library{
 
     //Data members of Member class
     private String member_name;
+    private int id;
     private long member_phone;
     private String date_of_borrow;
     private String date_of_return;
@@ -134,6 +136,7 @@ class Member extends Library{
     //Constructor of Member class
     Member(int n){
         super(n);
+        id = "";
         member_name = "";
         member_phone = 0;
         membership = "None";
@@ -172,6 +175,11 @@ class Member extends Library{
     public void member_creation(){
         Scanner mb = new Scanner(System.in);
         
+        //Random member id generation
+        Random rand = new Random();
+        int x = 1000000000;
+        id = rand.nextInt(x);
+
         System.out.printf("Enter your name: ");
         member_name = mb.next();
 
@@ -213,6 +221,7 @@ class Member extends Library{
 
     //Display the member data
     public void display(){
+        System.out.println("ID: " + id);
         System.out.println("Name of the member: " + member_name);
         System.out.println("Phone number of the member: " + Long.toString(member_phone));
         System.out.println("Membership Quality: " + membership);
@@ -225,7 +234,13 @@ class Member extends Library{
 //Driver Code
 public class project{
     public static void main(String[] args) {
-        Member member1 = new Member(1);
+        
+        int n;
+        Scanner st = new Scanner(System.in);
+        System.out.println("Enter number of books needed in the library: ");
+        n = st.nextInt();
+
+        Member member1 = new Member(n);
         member1.NoOfBooks();
         member1.library_input();   
         member1.library_display();
